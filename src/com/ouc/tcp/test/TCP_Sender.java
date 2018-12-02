@@ -77,7 +77,7 @@ public class TCP_Sender extends TCP_Sender_ADT {
 					tcpH.setTh_seq(0);
                     tcpPack.setTcpH(tcpH);
 					udt_send(tcpPack);
-					waitACK();
+					//waitACK();
 					break;
 
 				}
