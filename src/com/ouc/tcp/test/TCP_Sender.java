@@ -22,7 +22,7 @@ public class TCP_Sender extends TCP_Sender_ADT {
 	//可靠发送（应用层调用）：封装应用层数据，产生TCP数据报
 	public void rdt_send(int dataIndex, int[] appData) {
 		//生成TCP数据报（设置序号和数据字段/校验和),注意打包的顺序
-		tcpH.setTh_seq(dataIndex * appData.length + 1);//包序号设置为字节流号：你也可以使用其他编号方式，注意修改对应的接收方判断序号的部分
+		tcpH.setTh_seq(1);//包序号设置为字节流号：你也可以使用其他编号方式，注意修改对应的接收方判断序号的部分
 		tcpH.setTh_sum((short)0);//先将校验码设为0，用于后续的计算
 		tcpS.setData(appData);
 		tcpPack = new TCP_PACKET(tcpH, tcpS, destinAddr);
@@ -74,6 +74,8 @@ public class TCP_Sender extends TCP_Sender_ADT {
 					break;
 				} else if (ack != tcpPack.getTcpH().getTh_seq()) {
 					System.out.println(tcpPack);
+					tcpH.setTh_seq(0);
+                    tcpPack.setTcpH(tcpH);
 					udt_send(tcpPack);
 					waitACK();
 					break;

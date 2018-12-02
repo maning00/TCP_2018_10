@@ -35,9 +35,12 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 
 			tcpH.setTh_ack(recvPack.getTcpH().getTh_seq());
 			ackPack = new TCP_PACKET(tcpH, tcpS, recvPack.getSourceAddr());
+
+
+
 			//tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
 		if (CheckSum.computeChkSum(recvPack) != 0) {
-			tcpH.setTh_ack(recvPack.getTcpH().getTh_seq() - recvPack.getTcpS().getData().length);
+			tcpH.setTh_ack(0);
 			reply(ackPack);
 			num++;
 			System.out.println();
@@ -46,6 +49,7 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 
 			//回复ACK报文段
 			reply(ackPack);
+
 
 			//有重复数据的情况下需要检查数据顺序号（确定是否接收了重复的数据）
 			//去除报文中的顺序号
@@ -106,7 +110,7 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 		
 		//发送数据报
 		client.send(replyPack);		
-		
+
 	}
 	
 }
