@@ -11,27 +11,28 @@ import com.ouc.tcp.tool.TCP_TOOL;
 
 public class TCP_Receiver extends TCP_Receiver_ADT {
 	
-	int sequence=1;//ÓÃÓÚ¼ÇÂ¼µ±Ç°´ı½ÓÊÕµÄ°üĞòºÅ
-	private TCP_PACKET ackPack;	//»Ø¸´µÄACK±¨ÎÄ¶Î
+	int sequence=1;//ç”¨äºè®°å½•å½“å‰å¾…æ¥æ”¶çš„åŒ…åºå·
+	private TCP_PACKET ackPack;	//å›å¤çš„ACKæŠ¥æ–‡æ®µ
 
 	public static int num = 0;
-	private int lastSeq = 1;
-	private HashMap<Integer, TCP_PACKET> recived = new HashMap<Integer, TCP_PACKET>();// ÊÕµ½µÄÎŞ´í±¨ÎÄ¶Î³Ø
-	private TCP_PACKET neededPacket;// ÁÙÊ±¼ÇÂ¼µ±Ç°ĞèÒª½»¸¶µÄ±¨ÎÄ¶Î
 
-	/*¹¹Ôìº¯Êı*/
+	private HashMap<Integer, TCP_PACKET> recived = new HashMap<Integer, TCP_PACKET>();// æ”¶åˆ°çš„æ— é”™æŠ¥æ–‡æ®µæ± 
+	private TCP_PACKET neededPacket;// ä¸´æ—¶è®°å½•å½“å‰éœ€è¦äº¤ä»˜çš„æŠ¥æ–‡æ®µ
+
+	/*æ„é€ å‡½æ•°*/
 	public TCP_Receiver() {
-		super();	//µ÷ÓÃ³¬Àà¹¹Ôìº¯Êı
-		super.initTCP_Receiver(this);	//³õÊ¼»¯TCP½ÓÊÕ¶Ë
+		super();	//è°ƒç”¨è¶…ç±»æ„é€ å‡½æ•°
+		super.initTCP_Receiver(this);	//åˆå§‹åŒ–TCPæ¥æ”¶ç«¯
 	}
 
 	@Override
-	//½ÓÊÕµ½Êı¾İ±¨£º¼ì²éĞ£ÑéºÍ£¬ÉèÖÃ»Ø¸´µÄACK±¨ÎÄ¶Î
+	//æ¥æ”¶åˆ°æ•°æ®æŠ¥ï¼šæ£€æŸ¥æ ¡éªŒå’Œï¼Œè®¾ç½®å›å¤çš„ACKæŠ¥æ–‡æ®µ
 	public void rdt_recv(TCP_PACKET recvPack) {
-		//¼ì²éĞ£ÑéÂë£¬Éú³ÉACK
+		//æ£€æŸ¥æ ¡éªŒç ï¼Œç”ŸæˆACK
 		//if(CheckSum.computeChkSum(recvPack) == recvPack.getTcpH().getTh_sum()) {
 
-			//Éú³ÉACK±¨ÎÄ¶Î£¨ÉèÖÃÈ·ÈÏºÅ£©
+			//ç”ŸæˆACKæŠ¥æ–‡æ®µï¼ˆè®¾ç½®ç¡®è®¤å·ï¼‰
+
 			tcpH.setTh_ack(recvPack.getTcpH().getTh_seq());
 			ackPack = new TCP_PACKET(tcpH, tcpS, recvPack.getSourceAddr());
 			//tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
@@ -43,29 +44,26 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 			return;
 		}
 
-		if (recvPack.getTcpH().getTh_seq() >= lastSeq) {
-			recived.put(recvPack.getTcpH().getTh_seq(), recvPack);
-		}
-			//»Ø¸´ACK±¨ÎÄ¶Î
-			reply(ackPack);	
-			
-			//ÓĞÖØ¸´Êı¾İµÄÇé¿öÏÂĞèÒª¼ì²éÊı¾İË³ĞòºÅ£¨È·¶¨ÊÇ·ñ½ÓÊÕÁËÖØ¸´µÄÊı¾İ£©
-			//È¥³ı±¨ÎÄÖĞµÄË³ĞòºÅ
+			//å›å¤ACKæŠ¥æ–‡æ®µ
+			reply(ackPack);
+
+			//æœ‰é‡å¤æ•°æ®çš„æƒ…å†µä¸‹éœ€è¦æ£€æŸ¥æ•°æ®é¡ºåºå·ï¼ˆç¡®å®šæ˜¯å¦æ¥æ”¶äº†é‡å¤çš„æ•°æ®ï¼‰
+			//å»é™¤æŠ¥æ–‡ä¸­çš„é¡ºåºå·
 			/*int seq = recvPack.getTcpH().getTh_seq();
 
-		
-			//ÅĞ¶ÏÊÇ·ñÊÇÖØ¸´Êı¾İ£º·ÇÖØ¸´Êı¾İ£¬½«Êı¾İ²åÈëdata¶ÓÁĞ
+
+			//åˆ¤æ–­æ˜¯å¦æ˜¯é‡å¤æ•°æ®ï¼šéé‡å¤æ•°æ®ï¼Œå°†æ•°æ®æ’å…¥dataé˜Ÿåˆ—
 			int[] data = recvPack.getTcpS().getData();
 			dataQueue.add(data);
-			//¸üĞÂÆÚ´ı½ÓÊÕµÄË³ĞòºÅ
+			//æ›´æ–°æœŸå¾…æ¥æ”¶çš„é¡ºåºå·
 			sequence=sequence+data.length;
 		}
 
-		//ÏòÉÏ²ãÓ¦ÓÃ¡ª¡ªĞ´ÎÄ¼ş£¬½»¸¶Êı¾İ
-		if(dataQueue.size() >= 20) 
+		//å‘ä¸Šå±‚åº”ç”¨â€”â€”å†™æ–‡ä»¶ï¼Œäº¤ä»˜æ•°æ®
+		if(dataQueue.size() >= 20)
 			deliver_data();	*/
 		dataQueue.add(recvPack.getTcpS().getData());
-		// ½»¸¶Êı¾İ£¨Ã¿20×éÊı¾İ½»¸¶Ò»´Î£©
+		// äº¤ä»˜æ•°æ®ï¼ˆæ¯20ç»„æ•°æ®äº¤ä»˜ä¸€æ¬¡ï¼‰
 		if (dataQueue.size() == 20) {
 			deliver_data();
 		}
@@ -73,25 +71,25 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 	}
 
 	@Override
-	//½»¸¶Êı¾İ£¨½«Êı¾İĞ´ÈëÎÄ¼ş£©
+	//äº¤ä»˜æ•°æ®ï¼ˆå°†æ•°æ®å†™å…¥æ–‡ä»¶ï¼‰
 	public void deliver_data() {
-		//¼ì²édataQueue£¬½«Êı¾İĞ´ÈëÎÄ¼ş
+		//æ£€æŸ¥dataQueueï¼Œå°†æ•°æ®å†™å…¥æ–‡ä»¶
 		File fw = new File("recvData.txt");
 		BufferedWriter writer;
 		
 		try {
 			writer = new BufferedWriter(new FileWriter(fw, true));
 			
-			//Ñ­»·¼ì²édata¶ÓÁĞÖĞÊÇ·ñÓĞĞÂ½»¸¶Êı¾İ
+			//å¾ªç¯æ£€æŸ¥dataé˜Ÿåˆ—ä¸­æ˜¯å¦æœ‰æ–°äº¤ä»˜æ•°æ®
 			while(!dataQueue.isEmpty()) {
 				int[] data = dataQueue.poll();
 				
-				//½«Êı¾İĞ´ÈëÎÄ¼ş
+				//å°†æ•°æ®å†™å…¥æ–‡ä»¶
 				for(int i = 0; i < data.length; i++) {
 					writer.write(data[i] + "\n");
 				}
 				
-				writer.flush();		//Çå¿ÕÊä³ö»º´æ
+				writer.flush();		//æ¸…ç©ºè¾“å‡ºç¼“å­˜
 			}
 			writer.close();
 		} catch (IOException e) {
@@ -101,12 +99,12 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 	}
 
 	@Override
-	//»Ø¸´ACK±¨ÎÄ¶Î
+	//å›å¤ACKæŠ¥æ–‡æ®µ
 	public void reply(TCP_PACKET replyPack) {
-		//ÉèÖÃ´íÎó¿ØÖÆ±êÖ¾
-		tcpH.setTh_eflag((byte) 1);	//eFlag=0£¬ĞÅµÀÎŞ´íÎó
+		//è®¾ç½®é”™è¯¯æ§åˆ¶æ ‡å¿—
+		tcpH.setTh_eflag((byte) 1);	//eFlag=0ï¼Œä¿¡é“æ— é”™è¯¯
 		
-		//·¢ËÍÊı¾İ±¨
+		//å‘é€æ•°æ®æŠ¥
 		client.send(replyPack);		
 		
 	}

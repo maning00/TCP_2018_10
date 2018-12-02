@@ -8,64 +8,64 @@ import com.ouc.tcp.tool.TCP_TOOL;
 
 public class TCP_Sender extends TCP_Sender_ADT {
 	
-	private TCP_PACKET tcpPack;	//´ı·¢ËÍµÄTCPÊı¾İ±¨
-	private UDT_Timer timer;	//ÓÃÓÚ×ö¶¨Ê±Æ÷
+	private TCP_PACKET tcpPack;	//å¾…å‘é€çš„TCPæ•°æ®æŠ¥
+	private UDT_Timer timer;	//ç”¨äºåšå®šæ—¶å™¨
 
-	
-	/*¹¹Ôìº¯Êı*/
+
+	/*æ„é€ å‡½æ•°*/
 	public TCP_Sender() {
-		super();	//µ÷ÓÃ³¬Àà¹¹Ôìº¯Êı
-		super.initTCP_Sender(this);		//³õÊ¼»¯TCP·¢ËÍ¶Ë
+		super();	//è°ƒç”¨è¶…ç±»æ„é€ å‡½æ•°
+		super.initTCP_Sender(this);		//åˆå§‹åŒ–TCPå‘é€ç«¯
 	}
-	
+
 	@Override
-	//¿É¿¿·¢ËÍ£¨Ó¦ÓÃ²ãµ÷ÓÃ£©£º·â×°Ó¦ÓÃ²ãÊı¾İ£¬²úÉúTCPÊı¾İ±¨
+	//å¯é å‘é€ï¼ˆåº”ç”¨å±‚è°ƒç”¨ï¼‰ï¼šå°è£…åº”ç”¨å±‚æ•°æ®ï¼Œäº§ç”ŸTCPæ•°æ®æŠ¥
 	public void rdt_send(int dataIndex, int[] appData) {
-		//Éú³ÉTCPÊı¾İ±¨£¨ÉèÖÃĞòºÅºÍÊı¾İ×Ö¶Î/Ğ£ÑéºÍ),×¢Òâ´ò°üµÄË³Ğò
-		tcpH.setTh_seq(dataIndex * appData.length + 1);//°üĞòºÅÉèÖÃÎª×Ö½ÚÁ÷ºÅ£ºÄãÒ²¿ÉÒÔÊ¹ÓÃÆäËû±àºÅ·½Ê½£¬×¢ÒâĞŞ¸Ä¶ÔÓ¦µÄ½ÓÊÕ·½ÅĞ¶ÏĞòºÅµÄ²¿·Ö
-		tcpH.setTh_sum((short)0);//ÏÈ½«Ğ£ÑéÂëÉèÎª0£¬ÓÃÓÚºóĞøµÄ¼ÆËã
-		tcpS.setData(appData);		
-		tcpPack = new TCP_PACKET(tcpH, tcpS, destinAddr);		
-		//¸üĞÂĞ£ÑéÂë£»ĞèÒªÖØĞÂ½«tcpHÌîÈëµ½tcpPack				
+		//ç”ŸæˆTCPæ•°æ®æŠ¥ï¼ˆè®¾ç½®åºå·å’Œæ•°æ®å­—æ®µ/æ ¡éªŒå’Œ),æ³¨æ„æ‰“åŒ…çš„é¡ºåº
+		tcpH.setTh_seq(dataIndex * appData.length + 1);//åŒ…åºå·è®¾ç½®ä¸ºå­—èŠ‚æµå·ï¼šä½ ä¹Ÿå¯ä»¥ä½¿ç”¨å…¶ä»–ç¼–å·æ–¹å¼ï¼Œæ³¨æ„ä¿®æ”¹å¯¹åº”çš„æ¥æ”¶æ–¹åˆ¤æ–­åºå·çš„éƒ¨åˆ†
+		tcpH.setTh_sum((short)0);//å…ˆå°†æ ¡éªŒç è®¾ä¸º0ï¼Œç”¨äºåç»­çš„è®¡ç®—
+		tcpS.setData(appData);
+		tcpPack = new TCP_PACKET(tcpH, tcpS, destinAddr);
+		//æ›´æ–°æ ¡éªŒç ï¼›éœ€è¦é‡æ–°å°†tcpHå¡«å…¥åˆ°tcpPack
 		tcpH.setTh_sum(CheckSum.computeChkSum(tcpPack));
 		tcpPack.setTcpH(tcpH);
 		System.out.println("****" + tcpH.getTh_seq() + "****");
-		//·¢ËÍTCPÊı¾İ±¨
+		//å‘é€TCPæ•°æ®æŠ¥
 		udt_send(tcpPack);
-		
+
 		/**************************/
-		/**¶¨Ê±Æ÷µÄÓÃ·¨£º¶¨Ê±Æ÷µ½Ê±ºóÍê³ÉÖØ´«£¬ĞèÒªÓÃUDT_TimerÓÃÓÚ¼ÆÊ±£»¼ÆÊ±µ½0ºó£¬´¥·¢UDT_RetransTaskÍê³ÉÖØ´«**/
+		/**å®šæ—¶å™¨çš„ç”¨æ³•ï¼šå®šæ—¶å™¨åˆ°æ—¶åå®Œæˆé‡ä¼ ï¼Œéœ€è¦ç”¨UDT_Timerç”¨äºè®¡æ—¶ï¼›è®¡æ—¶åˆ°0åï¼Œè§¦å‘UDT_RetransTaskå®Œæˆé‡ä¼ **/
 		//timer = new UDT_Timer();
-		/**ÖØ´«Æ÷UDT_RetransTask½«·¢ËÍ¶ËºÍ·¢ËÍÄÚÈİ×÷Îª³ÉÔ±±äÁ¿**/
+		/**é‡ä¼ å™¨UDT_RetransTaskå°†å‘é€ç«¯å’Œå‘é€å†…å®¹ä½œä¸ºæˆå‘˜å˜é‡**/
 		//UDT_RetransTask reTrans = new UDT_RetransTask(client, tcpPack);
-		/**UDT_Timer¿ªÊ¼¼ÆÊ±µÚÒ»´ÎÖØ´«Îª5s£¬ÒÔºóÃ¿¼ä¸ô3sÍê³ÉÒ»´ÎÖØ´«£»Èç¹û·¢ÏÖ¶Ô·½½ÓÊÕ³É¹¦£¬ĞèÒªÔÚwaitACK()ÖĞ¹Ø±Õ¼ÆÊ±Æ÷**/
+		/**UDT_Timerå¼€å§‹è®¡æ—¶ç¬¬ä¸€æ¬¡é‡ä¼ ä¸º5sï¼Œä»¥åæ¯é—´éš”3så®Œæˆä¸€æ¬¡é‡ä¼ ï¼›å¦‚æœå‘ç°å¯¹æ–¹æ¥æ”¶æˆåŠŸï¼Œéœ€è¦åœ¨waitACK()ä¸­å…³é—­è®¡æ—¶å™¨**/
 		//timer.schedule(reTrans, 5000, 5000);
-		
-		//ÔÚwaitACKÊ¹ÓÃÎŞÏßÑ­»·ºÍBreak£¬À´ÊµÏÖÍ£Ö¹µÈ´ı£»µ±Éæ¼°Go-Back-N »ò Selective-ResponseµÄ»°£¬¾Í²»¿ÉÒÔÓÃÍ£Ö¹µÈ´ıÁË
+
+		//åœ¨waitACKä½¿ç”¨æ— çº¿å¾ªç¯å’ŒBreakï¼Œæ¥å®ç°åœæ­¢ç­‰å¾…ï¼›å½“æ¶‰åŠGo-Back-N æˆ– Selective-Responseçš„è¯ï¼Œå°±ä¸å¯ä»¥ç”¨åœæ­¢ç­‰å¾…äº†
 		waitACK();
-	
+
 	}
-	
+
 	@Override
-	//²»¿É¿¿·¢ËÍ£º½«´ò°üºÃµÄTCPÊı¾İ±¨Í¨¹ı²»¿É¿¿´«ÊäĞÅµÀ·¢ËÍ
+	//ä¸å¯é å‘é€ï¼šå°†æ‰“åŒ…å¥½çš„TCPæ•°æ®æŠ¥é€šè¿‡ä¸å¯é ä¼ è¾“ä¿¡é“å‘é€
 	public void udt_send(TCP_PACKET tcpPack) {
-		//ÉèÖÃ´íÎó¿ØÖÆ±êÖ¾
+		//è®¾ç½®é”™è¯¯æ§åˆ¶æ ‡å¿—
 		tcpH.setTh_eflag(EFlagValue.eflag);
-		
-		//¼ÆËãĞ£ÑéºÍ£¬ÉèÖÃTCPÊ×²¿ÖØĞÂ´ò°ü
-		
-		//·¢ËÍÊı¾İ±¨
+
+		//è®¡ç®—æ ¡éªŒå’Œï¼Œè®¾ç½®TCPé¦–éƒ¨é‡æ–°æ‰“åŒ…
+
+		//å‘é€æ•°æ®æŠ¥
 		client.send(tcpPack);
 	}
-	
+
 	@Override
-	//´¦ÀíACK±¨ÎÄ£¬½²½ÓÊÕACKÓë´¦ÀíACK·Ö¿ª
+	//å¤„ç†ACKæŠ¥æ–‡ï¼Œè®²æ¥æ”¶ACKä¸å¤„ç†ACKåˆ†å¼€
 	public void waitACK() {
-		//Ñ­»·¼ì²éackQueue;
-		//Ê¹ÓÃÎŞÏßÑ­»·ºÍBreak£¬À´ÊµÏÖÍ£Ö¹µÈ´ı£»µ±Éæ¼°Go-Back-N »ò Selective-ResponseµÄ»°£¬¾Í²»¿ÉÒÔÓÃÍ£Ö¹µÈ´ıÁË
+		//å¾ªç¯æ£€æŸ¥ackQueue;
+		//ä½¿ç”¨æ— çº¿å¾ªç¯å’ŒBreakï¼Œæ¥å®ç°åœæ­¢ç­‰å¾…ï¼›å½“æ¶‰åŠGo-Back-N æˆ– Selective-Responseçš„è¯ï¼Œå°±ä¸å¯ä»¥ç”¨åœæ­¢ç­‰å¾…äº†
 		while (true) {
 			/*if(!ackQueue.isEmpty() && ackQueue.poll() == tcpPack.getTcpH().getTh_seq()) {
-				/**RDT3.0Í£Ö¹µÈ´ıµÄÊ±ºòĞèÒª¹Ø±Õ¼ÆÊ±Æ÷**/
+				/**RDT3.0åœæ­¢ç­‰å¾…çš„æ—¶å€™éœ€è¦å…³é—­è®¡æ—¶å™¨**/
 			//timer.cancel();*/
 			//break;
 			if (!ackQueue.isEmpty()) {
@@ -85,13 +85,13 @@ public class TCP_Sender extends TCP_Sender_ADT {
 	}
 
 	@Override
-	//½ÓÊÕµ½ACK±¨ÎÄ£º¼ì²éĞ£ÑéºÍ£¬½«È·ÈÏºÅ²åÈëack¶ÓÁĞ
+	//æ¥æ”¶åˆ°ACKæŠ¥æ–‡ï¼šæ£€æŸ¥æ ¡éªŒå’Œï¼Œå°†ç¡®è®¤å·æ’å…¥acké˜Ÿåˆ—
 	public void recv(TCP_PACKET recvPack) {
-		//ĞèÒª¼ì²éĞ£ÑéºÍ
+		//éœ€è¦æ£€æŸ¥æ ¡éªŒå’Œ
 		
-		//´òÓ¡ACKºÅ£¬±ãÓÚµ÷ÊÔ
-		System.out.println("Receive ACK Number£º "+ recvPack.getTcpH().getTh_ack());
-		//½²ACKºÅ²åÈë¶ÓÁĞµÈ´ıÓÃWaitACK´¦Àí£¬½«´¦ÀíÓë½ÓÊÕ»Ø¸´·Ö¿ª
+		//æ‰“å°ACKå·ï¼Œä¾¿äºè°ƒè¯•
+		System.out.println("Receive ACK Numberï¼š "+ recvPack.getTcpH().getTh_ack());
+		//è®²ACKå·æ’å…¥é˜Ÿåˆ—ç­‰å¾…ç”¨WaitACKå¤„ç†ï¼Œå°†å¤„ç†ä¸æ¥æ”¶å›å¤åˆ†å¼€
 		ackQueue.add(recvPack.getTcpH().getTh_ack());
 		
 	}

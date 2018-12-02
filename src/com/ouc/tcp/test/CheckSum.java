@@ -3,10 +3,10 @@ import com.ouc.tcp.message.TCP_HEADER;
 import com.ouc.tcp.message.TCP_PACKET;
 public class CheckSum {
     private static int NO = 0;
-    /* ¼ÆËãTCP±¨ÎÄ¶ÎĞ£ÑéºÍ£ºÖ»ĞèĞ£ÑéTCPÊ×²¿ÖĞµÄseq¡¢ackºÍsum£¬ÒÔ¼°TCPÊı¾İ×Ö¶Î */
+    /* è®¡ç®—TCPæŠ¥æ–‡æ®µæ ¡éªŒå’Œï¼šåªéœ€æ ¡éªŒTCPé¦–éƒ¨ä¸­çš„seqã€ackå’Œsumï¼Œä»¥åŠTCPæ•°æ®å­—æ®µ */
     public static short computeChkSum(TCP_PACKET tcpPack) {
         int checkSum = 0;
-        // ¼ÆËãĞ£ÑéºÍ
+        // è®¡ç®—æ ¡éªŒå’Œ
         TCP_HEADER tcpH = tcpPack.getTcpH();
         int[] data = tcpPack.getTcpS().getData();
         //
@@ -43,7 +43,7 @@ public class CheckSum {
          * System.out.println("checkSum2 += data[](hex) :" + Integer.toHexString(checkSum2));
          * System.out.println("checkSum(hex) : " + Integer.toHexString(checkSum));
          */
-        // ¼ÓÁ½´Î·ÀÖ¹µÚÒ»´Î¼ÓÍêÓĞ½øÎ»
+        // åŠ ä¸¤æ¬¡é˜²æ­¢ç¬¬ä¸€æ¬¡åŠ å®Œæœ‰è¿›ä½
         /*
          * System.out.println("final checkSum : " + checkSum);
          * System.out.println("final checkSum(hex) : " + Integer.toHexString(checkSum));
