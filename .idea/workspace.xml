@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="e44644d5-7c54-4524-a241-f6bcd358549b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/com/ouc/tcp/test/TCP_Sender.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/com/ouc/tcp/test/TCP_Sender.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/recvData.txt" beforeDir="false" afterPath="$PROJECT_DIR$/recvData.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/ouc/tcp/test/TCP_Sender.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/ouc/tcp/test/TCP_Sender.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/bin/" />
@@ -18,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/ouc/tcp/test/TCP_Sender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="337">
-              <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
+            <state relative-caret-position="228">
+              <caret line="74" column="59" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -56,8 +57,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Log.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-450">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
+            <state relative-caret-position="277">
+              <caret line="33" column="50" lean-forward="true" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -149,7 +150,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543753178435" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1543753459218" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -227,7 +228,7 @@
       <workItem from="1543370451316" duration="6357000" />
       <workItem from="1543409200602" duration="2354000" />
       <workItem from="1543478093849" duration="3022000" />
-      <workItem from="1543749224390" duration="3877000" />
+      <workItem from="1543749224390" duration="4157000" />
     </task>
     <task id="LOCAL-00001" summary="1">
       <created>1543749883308</created>
@@ -243,11 +244,18 @@
       <option name="project" value="LOCAL" />
       <updated>1543752755444</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="RDT2.2">
+      <created>1543753219578</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1543753219579</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42155000" />
+    <option name="totallyTimeSpent" value="42435000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="0" />
@@ -262,7 +270,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.34751773" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.34751773" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -333,7 +341,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1" />
     <MESSAGE value="RDT2.2但存在重发两次的问题" />
-    <option name="LAST_COMMIT_MESSAGE" value="RDT2.2但存在重发两次的问题" />
+    <MESSAGE value="RDT2.2" />
+    <option name="LAST_COMMIT_MESSAGE" value="RDT2.2" />
   </component>
   <component name="editorHistoryManager">
     <entry file="jar://C:/Program Files/Java/jdk-10.0.2/lib/src.zip!/java.base/java/lang/ClassLoader.java" />
@@ -444,13 +453,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Log.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/ouc/tcp/test/EFlagValue.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -478,10 +480,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Log.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="277">
+          <caret line="33" column="50" lean-forward="true" selection-start-line="33" selection-start-column="50" selection-end-line="33" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/ouc/tcp/test/TCP_Sender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="337">
-          <caret line="79" column="22" selection-start-line="79" selection-start-column="22" selection-end-line="79" selection-end-column="22" />
+        <state relative-caret-position="228">
+          <caret line="74" column="59" selection-start-line="74" selection-start-column="59" selection-end-line="74" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

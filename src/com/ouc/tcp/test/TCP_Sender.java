@@ -70,14 +70,14 @@ public class TCP_Sender extends TCP_Sender_ADT {
 			//break;
 			if (!ackQueue.isEmpty()) {
 				Integer ack = ackQueue.poll();
-				if (ack == tcpPack.getTcpH().getTh_seq()) {
+				if (tcpPack.getTcpH().getTh_seq()==1) {
 					break;
-				} else if (ack != tcpPack.getTcpH().getTh_seq()) {
+				} else if (tcpPack.getTcpH().getTh_seq()==0) {
 					System.out.println(tcpPack);
 					tcpH.setTh_seq(0);
                     tcpPack.setTcpH(tcpH);
 					udt_send(tcpPack);
-					//waitACK();
+					waitACK();
 					break;
 
 				}
