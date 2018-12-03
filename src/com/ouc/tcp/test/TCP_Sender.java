@@ -7,7 +7,7 @@ import com.ouc.tcp.message.*;
 import com.ouc.tcp.tool.TCP_TOOL;
 
 public class TCP_Sender extends TCP_Sender_ADT {
-	
+
 	private TCP_PACKET tcpPack;	//待发送的TCP数据报
 	private UDT_Timer timer;	//用于做定时器
 
@@ -22,14 +22,14 @@ public class TCP_Sender extends TCP_Sender_ADT {
 	//可靠发送（应用层调用）：封装应用层数据，产生TCP数据报
 	public void rdt_send(int dataIndex, int[] appData) {
 		//生成TCP数据报（设置序号和数据字段/校验和),注意打包的顺序
-		tcpH.setTh_seq(1);//包序号设置为字节流号：你也可以使用其他编号方式，注意修改对应的接收方判断序号的部分
+		tcpH.setTh_seq(dataIndex * appData.length + 1);//包序号设置为字节流号：你也可以使用其他编号方式，注意修改对应的接收方判断序号的部分
 		tcpH.setTh_sum((short)0);//先将校验码设为0，用于后续的计算
 		tcpS.setData(appData);
 		tcpPack = new TCP_PACKET(tcpH, tcpS, destinAddr);
 		//更新校验码；需要重新将tcpH填入到tcpPack
 		tcpH.setTh_sum(CheckSum.computeChkSum(tcpPack));
 		tcpPack.setTcpH(tcpH);
-		System.out.println("****" + tcpH.getTh_seq() + "****");
+
 		//发送TCP数据报
 		udt_send(tcpPack);
 
@@ -63,39 +63,33 @@ public class TCP_Sender extends TCP_Sender_ADT {
 	public void waitACK() {
 		//循环检查ackQueue;
 		//使用无线循环和Break，来实现停止等待；当涉及Go-Back-N 或 Selective-Response的话，就不可以用停止等待了
-		while (true) {
-			/*if(!ackQueue.isEmpty() && ackQueue.poll() == tcpPack.getTcpH().getTh_seq()) {
-				/**RDT3.0停止等待的时候需要关闭计时器**/
-			//timer.cancel();*/
-			//break;
+		while(true) {
 			if (!ackQueue.isEmpty()) {
 				Integer ack = ackQueue.poll();
-				if (tcpPack.getTcpH().getTh_seq()==1) {
+				if (ack == tcpPack.getTcpH().getTh_seq()) {
 					break;
-				} else if (tcpPack.getTcpH().getTh_seq()==0) {
-					System.out.println(tcpPack);
-					tcpH.setTh_seq(0);
-                    tcpPack.setTcpH(tcpH);
+				} else if (ack != tcpPack.getTcpH().getTh_seq()) {
+					//System.out.println(tcpPack);
 					udt_send(tcpPack);
+
 					waitACK();
 					break;
-
 				}
 			}
-
 		}
+
 	}
 
 	@Override
 	//接收到ACK报文：检查校验和，将确认号插入ack队列
 	public void recv(TCP_PACKET recvPack) {
 		//需要检查校验和
-		
+
 		//打印ACK号，便于调试
 		System.out.println("Receive ACK Number： "+ recvPack.getTcpH().getTh_ack());
 		//讲ACK号插入队列等待用WaitACK处理，将处理与接收回复分开
 		ackQueue.add(recvPack.getTcpH().getTh_ack());
-		
+
 	}
-	
+
 }
