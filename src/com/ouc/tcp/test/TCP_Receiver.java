@@ -24,13 +24,15 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 	//接收到数据报：检查校验和，设置回复的ACK报文段
 	public void rdt_recv(TCP_PACKET recvPack) {
 		//检查校验码，生成ACK
+		if(sequence==recvPack.getTcpH().getTh_seq()){     //待接受与收到的相同，直接收下即可。
 		tcpH.setTh_ack(recvPack.getTcpH().getTh_seq());
 		ackPack = new TCP_PACKET(tcpH, tcpS, recvPack.getSourceAddr());
 		if(CheckSum.computeChkSum(recvPack) == recvPack.getTcpH().getTh_sum()) {
 
 			//生成ACK报文段（设置确认号）
 
-			//tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
+			tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
+			ackPack.setTcpH(tcpH);
 
 			//回复ACK报文段
 			reply(ackPack);
@@ -44,10 +46,19 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 			int[] data = recvPack.getTcpS().getData();
 			dataQueue.add(data);
 			//更新期待接收的顺序号
-			sequence=sequence+data.length;
+			if(sequence==1){
+				sequence=0;
+			} else if(sequence==0){
+				sequence=1;
+			}
+
 		}
+
+		// 校验出错要求重发
 		if (CheckSum.computeChkSum(recvPack) != recvPack.getTcpH().getTh_sum()) {
 			tcpH.setTh_ack(recvPack.getTcpH().getTh_seq() - recvPack.getTcpS().getData().length);
+			tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
+			ackPack.setTcpH(tcpH);
 			reply(ackPack);
 			return;
 		}
@@ -55,6 +66,19 @@ public class TCP_Receiver extends TCP_Receiver_ADT {
 		//向上层应用——写文件，交付数据
 		if(dataQueue.size() >= 20)
 			deliver_data();
+	} else if(sequence!=recvPack.getTcpH().getTh_seq()){        //待接受与收到的不同，说明接收方重发，上个ack包没收到，故再发一次上个ack
+			int tmp=0;
+			if(sequence==1){
+				tmp=0;
+			}else if (sequence==0){
+				tmp=1;
+			}
+			tcpH.setTh_ack(tmp);
+			ackPack = new TCP_PACKET(tcpH, tcpS, recvPack.getSourceAddr());
+			tcpH.setTh_sum(CheckSum.computeChkSum(ackPack));
+			ackPack.setTcpH(tcpH);
+			reply(ackPack);
+		}
 	}
 
 	@Override
