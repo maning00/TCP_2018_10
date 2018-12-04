@@ -35,11 +35,11 @@ public class TCP_Sender extends TCP_Sender_ADT {
 
 		/**************************/
 		/**定时器的用法：定时器到时后完成重传，需要用UDT_Timer用于计时；计时到0后，触发UDT_RetransTask完成重传**/
-		//timer = new UDT_Timer();
+		timer = new UDT_Timer();
 		/**重传器UDT_RetransTask将发送端和发送内容作为成员变量**/
-		//UDT_RetransTask reTrans = new UDT_RetransTask(client, tcpPack);
+		UDT_RetransTask reTrans = new UDT_RetransTask(client, tcpPack);
 		/**UDT_Timer开始计时第一次重传为5s，以后每间隔3s完成一次重传；如果发现对方接收成功，需要在waitACK()中关闭计时器**/
-		//timer.schedule(reTrans, 5000, 5000);
+		timer.schedule(reTrans, 5000, 5000);
 
 		//在waitACK使用无线循环和Break，来实现停止等待；当涉及Go-Back-N 或 Selective-Response的话，就不可以用停止等待了
 		waitACK();
@@ -71,12 +71,13 @@ public class TCP_Sender extends TCP_Sender_ADT {
 			if (!ackQueue.isEmpty()) {
 				Integer ack = ackQueue.poll();
 				if (ack == tcpPack.getTcpH().getTh_seq()) {
+					timer.cancel();
 					if(seq==1){
 						seq=0;
 					} else if(seq==0){
 						seq=1;
 					}
-					//timer.cancel();
+
 					break;
 				} else if (ack != tcpPack.getTcpH().getTh_seq()) {
 					//System.out.println(tcpPack);
@@ -99,9 +100,9 @@ public class TCP_Sender extends TCP_Sender_ADT {
 			System.out.println("Receive ACK Number： " + recvPack.getTcpH().getTh_ack());
 			//讲ACK号插入队列等待用WaitACK处理，将处理与接收回复分开
 			ackQueue.add(recvPack.getTcpH().getTh_ack());
-		} else {
-			udt_send(tcpPack);
-		}
+		} //else {
+			//udt_send(tcpPack);
+		//}
 	}
 
 }
